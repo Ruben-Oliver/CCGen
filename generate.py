@@ -143,7 +143,7 @@ def pickRandom(randomType:str, network=""): # This function kind of sucks right 
     
         return prefix
 
-    return network, length, prefix
+    return str(network), length, str(prefix)
 
 def generateCard(network="", length=0, prefix=0):
     if network == "":
