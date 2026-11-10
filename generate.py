@@ -92,20 +92,75 @@ def generateNumbers(network, length, prefix): # If no network or specific length
 
     return digits
 
-
-def pickRandom():
-    network = random.choice(list(networks.keys()))
-
-    prefix = random.choice(networks[network][1])
-    possibleLengths, nothing = networks[network.upper()]
+def luhnCheckDigit(digits): # This function assumes the card number passed in has already been validated to both be a valid length, and contain a valid IIN/BIN
     
-    length = any(
-        length in item if isinstance(item, range) else length == item
-        for item in possibleLengths
-    )
-    return network, prefix, length
+    
+    digits = str(digits) # Used to reverse digits for calculation, and card numbers should not be treated as one whole integer anyway
+    digitsReversed = digits.replace(" ", "") [::-1] # Remove spaces (if present) and reverse digits
+    
+    luhnSum = 0
 
-def generateCard(network="", length=0, ):
-    pass
+    for digit in digitsReversed[1::2]: # Gets every first digit from number
+        luhnSum += int(digit)
 
-print(pickRandom())
+    for digit in digitsReversed[::2]: # Gets every second digit from card number
+        if int(digit) * 2 <= 9:
+            luhnSum += (int(digit) * 2)
+        else:
+            luhnSum += ((int(digit) * 2) - 9)
+
+
+    nextMultiple10Found = False
+    luhnSumTemp = luhnSum
+    while nextMultiple10Found == False:
+        luhnSumTemp += 1
+        if (luhnSumTemp % 10) == 0:
+            nextMultiple10Found = True
+    checkDigit = luhnSumTemp - luhnSum
+
+
+    return checkDigit
+
+def pickRandom(randomType:str, network=""):
+    randomType = randomType.lower()
+    if randomType == "network" and network == "":
+        network = random.choice(list(networks.keys()))
+        return network
+    if randomType == "length" and network != "":
+        length = random.choice(networks[network][0])
+
+        if type(length) == range:
+            length = random.choice(length)
+
+        return length
+
+    if randomType == "prefix":
+        prefix = random.choice(networks[network][1])
+        if type(prefix) == range:
+            prefix = random.choice(prefix)
+    
+        return prefix
+
+    return network, length, prefix
+
+def generateCard(network="", length=0, prefix=0):
+    if network == "":
+        network = pickRandom("network")
+
+    if length == 0:
+        length = pickRandom("length", network)
+
+    if prefix == 0:
+        prefix = pickRandom("prefix", network)
+
+    digits = generateNumbers(network, length, prefix)
+
+    checkDigit = luhnCheckDigit(digits)
+
+    finalNumber = str(digits) + str(checkDigit)
+
+    return finalNumber
+
+
+
+print(generateCard())
