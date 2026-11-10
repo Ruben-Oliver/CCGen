@@ -93,43 +93,19 @@ def generateNumbers(network, length, prefix): # If no network or specific length
     return digits
 
 
+def pickRandom():
+    network = random.choice(list(networks.keys()))
 
-
-
-def luhnCheckDigit(ccnum): # This function assumes the card number passed in has already been validated to both be a valid length, and contain a valid IIN/BIN
+    prefix = random.choice(networks[network][1])
+    possibleLengths, nothing = networks[network.upper()]
     
-    
-    ccnum = str(ccnum) # Used to reverse digits for calculation, and card numbers should not be treated as one whole integer anyway
-    ccnumReversed = ccnum.replace(" ", "") [::-1] # Remove spaces (if present) and reverse digits
-    
-    luhnSum = 0
+    length = any(
+        length in item if isinstance(item, range) else length == item
+        for item in possibleLengths
+    )
+    return network, prefix, length
 
-    for digit in ccnumReversed[1::2]: # Gets every first digit from number
-        luhnSum += int(digit)
+def generateCard(network="", length=0, ):
+    pass
 
-    for digit in ccnumReversed[::2]: # Gets every second digit from card number
-        if int(digit) * 2 <= 9:
-            luhnSum += (int(digit) * 2)
-        else:
-            luhnSum += ((int(digit) * 2) - 9)
-
-
-    nextMultiple10Found = False
-    luhnSumTemp = luhnSum
-    while nextMultiple10Found == False:
-        luhnSumTemp += 1
-        if (luhnSumTemp % 10) == 0:
-            nextMultiple10Found = True
-    checkDigit = luhnSumTemp - luhnSum
-
-
-    return checkDigit
-
-
-digits = generateNumbers("AMERICAN EXPRESS", 15, 37)
-
-checkDigit = luhnCheckDigit(digits)
-
-final = str(digits) + str(checkDigit)
-
-print(final)
+print(pickRandom())
