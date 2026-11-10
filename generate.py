@@ -90,7 +90,7 @@ def generateNumbers(network, length, prefix): # If no network or specific length
         digit = random.randint(0, 9)
         digits += str(digit)
 
-    return digits
+    return str(digits)
 
 def luhnCheckDigit(digits): # This function assumes the card number passed in has already been validated to both be a valid length, and contain a valid IIN/BIN
     
@@ -109,7 +109,9 @@ def luhnCheckDigit(digits): # This function assumes the card number passed in ha
         else:
             luhnSum += ((int(digit) * 2) - 9)
 
-
+    if (luhnSum % 10) == 0:
+        return 0
+    
     nextMultiple10Found = False
     luhnSumTemp = luhnSum
     while nextMultiple10Found == False:
@@ -119,7 +121,7 @@ def luhnCheckDigit(digits): # This function assumes the card number passed in ha
     checkDigit = luhnSumTemp - luhnSum
 
 
-    return checkDigit
+    return str(checkDigit)
 
 def pickRandom(randomType:str, network=""):
     randomType = randomType.lower()
@@ -134,7 +136,7 @@ def pickRandom(randomType:str, network=""):
 
         return length
 
-    if randomType == "prefix":
+    if randomType == "prefix" and network != "":
         prefix = random.choice(networks[network][1])
         if type(prefix) == range:
             prefix = random.choice(prefix)
@@ -159,7 +161,7 @@ def generateCard(network="", length=0, prefix=0):
 
     finalNumber = str(digits) + str(checkDigit)
 
-    return finalNumber
+    return str(finalNumber)
 
 
 
