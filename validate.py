@@ -1,4 +1,4 @@
-
+import pandas as pd
 
 # Validate Luhn Check Digit
 def validateCheckDigit(digits):
@@ -41,3 +41,13 @@ def validateCheckDigit(digits):
 # checking numbers against my dict of valid networks/issuers, but I'm 100% certain
 # that I'm missing some niche/regional prefixes/lengths anyway, and real localisation
 # sounds like a nightmare.
+
+def lookupBin(prefix):
+    bins = pd.read_csv("bins.csv", dtype={"bin": "string"})
+
+    results = bins[bins['bin'].str.startswith(prefix)].values.tolist()
+
+
+    return results
+    
+    
