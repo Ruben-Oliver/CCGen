@@ -52,7 +52,24 @@ This function combines all the above functions in tandem to generate a full math
   
 
 
+## `validate.py` Functions
+
+1. `validateCheckDigit(digits)`  
+This function validates whether or not a card numbers' check digit matches with what the Luhn Algorithm dictates.
+
+    This function will return a boolean `True` or `False`.
+
+2. `lookupBin(prefix)`
+This function takes a card number prefix and uses Pandas to open a local `bins.csv` file containing a maintained list of known BIN/IIN prefixes. Credit for this list goes to Techbuddie-Solutions and their [binlist-data repository](https://github.com/Techbuddie-Solutions/binlist-data).
+
+    This function will return a list of results, each result is itself a list containing data in the below format:
+    `[bin, brand, type, category, issuer, issuer_phone, issuer_url, alpha_2, alpha_3, country, source, seen]`
+
+    There will be one of these lists for every returned result for the given prefix.
 
 
 
 
+# Credits
+
+`bins.csv` (list of known BIN/IIN numbers) was sourced from [Techbuddie-Solutions](https://github.com/Techbuddie-Solutions/binlist-data), maintainer of [binlist.io](https://binlist.io). Thanks!
